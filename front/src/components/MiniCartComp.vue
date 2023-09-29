@@ -35,6 +35,7 @@ export default {
       price: 0,
       verifSuppr: false,
       showModal: false,
+      products: [],
     };
   },
   methods: {
@@ -54,25 +55,37 @@ export default {
       // eslint-disable-next-line no-restricted-globals
       location.reload();
     },
-    increment() {
-      this.count += 1;
-      const newData = { qty: this.count };
-      this.price = this.count * this.infoMinicartObj.value.price.base.amount;
-      console.log(this.price);
-      fetch(`http://localhost:3000/cart/${this.infoMinicartObj.value.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newData),
-      })
+    async increment() {
+      let product;
+      await fetch(`http://localhost:3000/products/${this.infoMinicartObj.value.id}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          product = data;
         })
         .catch((error) => {
-          console.error('Erreur lors de la mise à jour de la quantité:', error);
+          console.log(error);
         });
+      console.log(this.count, product.qty);
+      if (this.count < product.qty) {
+        this.count += 1;
+        const newData = { qty: this.count };
+        this.price = this.count * this.infoMinicartObj.value.price.base.amount;
+        console.log(this.price);
+        fetch(`http://localhost:3000/cart/${this.infoMinicartObj.value.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => {
+            console.error('Erreur lors de la mise à jour de la quantité:', error);
+          });
+      }
     },
     decrement() {
       if (this.count > 0) {
@@ -101,7 +114,7 @@ export default {
       }
     },
   },
-  created() {
+  async created() {
     this.price = this.count * this.infoMinicartObj.value.price.base.amount;
   },
 };

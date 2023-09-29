@@ -94,26 +94,38 @@ export default {
         this.buttonInfoVar = false;
       }
     },
-    increment() {
-      this.count += 1;
-      const newData = { qty: this.count };
-      this.price = this.count * this.infoObj.value.price.base.amount;
-      console.log(this.price);
-      fetch(`http://localhost:3000/cart/${this.infoObj.value.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newData),
-      })
+    async increment() {
+      let product;
+      await fetch(`http://localhost:3000/products/${this.infoObj.value.id}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data); // Loggez les données mises à jour
+          product = data;
         })
         .catch((error) => {
-          console.error('Erreur lors de la mise à jour de la quantité:', error);
+          console.log(error);
         });
-      window.location.reload();
+      console.log(product.qty);
+      if (this.count < product.qty) {
+        this.count += 1;
+        const newData = { qty: this.count };
+        this.price = this.count * this.infoObj.value.price.base.amount;
+        console.log(this.price);
+        fetch(`http://localhost:3000/cart/${this.infoObj.value.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data); // Loggez les données mises à jour
+          })
+          .catch((error) => {
+            console.error('Erreur lors de la mise à jour de la quantité:', error);
+          });
+        window.location.reload();
+      }
     },
     decrement() {
       if (this.count > 0) {

@@ -10,6 +10,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <button type="button" class="btn btn-light me-2 buttonObj">Prix : {{ price }}€</button>
+                    <button type="button" class="btn btn-light me-2 buttonObj">Quantité : {{ infoProdObj.value.qty }}</button>
                     <button type="button" class="btn btn-primary me-2 buttonObj" @click="AddItemCart">Ajouter</button>
                 </div>
             </div>
@@ -41,26 +42,28 @@ export default {
       const existingProduct = cart.find((item) => item.id === this.infoProdObj.value.id);
       console.log('test1');
       if (existingProduct) {
-        existingProduct.qty += 1;
-        const newData = { qty: existingProduct.qty };
-        console.log(newData);
-        console.log();
-        fetch(`http://localhost:3000/cart/${this.infoProdObj.value.id}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newData),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
+        if (existingProduct.qty < this.infoProdObj.value.qty) {
+          existingProduct.qty += 1;
+          const newData = { qty: existingProduct.qty };
+          console.log(newData);
+          console.log();
+          fetch(`http://localhost:3000/cart/${this.infoProdObj.value.id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newData),
           })
-          .catch((error) => {
-            console.error('Erreur lors de la mise à jour de la quantité:', error);
-          });
-        window.location.reload();
-      } else {
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+            })
+            .catch((error) => {
+              console.error('Erreur lors de la mise à jour de la quantité:', error);
+            });
+          window.location.reload();
+        }
+      } else if (this.infoProdObj.value.qty > 0) {
         console.log(this.infoProdObj.value.id);
         const productResponse = await fetch(`http://localhost:3000/products/${this.infoProdObj.value.id}`);
         if (!productResponse.ok) throw new Error('Failed to fetch product');
