@@ -33,20 +33,14 @@ export default {
   },
   methods: {
     async AddItemCart() {
-      console.log(this.infoProdObj.value.id);
       const response1 = await fetch('http://localhost:3000/cart');
-      console.log('test2');
       if (!response1.ok) throw new Error('Failed to fetch cart');
       const cart = await response1.json();
-
       const existingProduct = cart.find((item) => item.id === this.infoProdObj.value.id);
-      console.log('test1');
       if (existingProduct) {
         if (existingProduct.qty < this.infoProdObj.value.qty) {
           existingProduct.qty += 1;
           const newData = { qty: existingProduct.qty };
-          console.log(newData);
-          console.log();
           fetch(`http://localhost:3000/cart/${this.infoProdObj.value.id}`, {
             method: 'PATCH',
             headers: {
@@ -55,21 +49,16 @@ export default {
             body: JSON.stringify(newData),
           })
             .then((response) => response.json())
-            .then((data) => {
-              console.log(data);
-            })
             .catch((error) => {
               console.error('Erreur lors de la mise à jour de la quantité:', error);
             });
           window.location.reload();
         }
       } else if (this.infoProdObj.value.qty > 0) {
-        console.log(this.infoProdObj.value.id);
         const productResponse = await fetch(`http://localhost:3000/products/${this.infoProdObj.value.id}`);
         if (!productResponse.ok) throw new Error('Failed to fetch product');
         const product = await productResponse.json();
         product.qty = 1;
-        console.log(product);
         await fetch('http://localhost:3000/cart', {
           method: 'POST',
           headers: {

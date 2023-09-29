@@ -34,11 +34,9 @@ export default {
   },
   async created() {
     let info;
-    console.log('created');
     await fetch('http://localhost:3000/cart')
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         info = data;
       })
       .catch((error) => {
@@ -47,7 +45,6 @@ export default {
     Object.entries(info).forEach(([key, value]) => {
       this.infos.push({ key, value });
     });
-    console.log(this.infos);
     for (let i = 0; i < this.infos.length; i += 1) {
       this.total = this.infos[i].value.qty * this.infos[i].value.price.base.amount + this.total;
     }

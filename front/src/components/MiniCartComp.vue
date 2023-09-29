@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     async delItemCart() {
-      console.log('delete');
       await fetch(`http://localhost:3000/cart/${this.infoMinicartObj.value.id}`, {
         method: 'DELETE',
       })
@@ -65,12 +64,10 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      console.log(this.count, product.qty);
       if (this.count < product.qty) {
         this.count += 1;
         const newData = { qty: this.count };
         this.price = this.count * this.infoMinicartObj.value.price.base.amount;
-        console.log(this.price);
         fetch(`http://localhost:3000/cart/${this.infoMinicartObj.value.id}`, {
           method: 'PATCH',
           headers: {
@@ -79,9 +76,6 @@ export default {
           body: JSON.stringify(newData),
         })
           .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-          })
           .catch((error) => {
             console.error('Erreur lors de la mise à jour de la quantité:', error);
           });
@@ -102,9 +96,6 @@ export default {
             body: JSON.stringify(newData),
           })
             .then((response) => response.json())
-            .then((data) => {
-              console.log(data);
-            })
             .catch((error) => {
               console.error('Erreur lors de la mise à jour de la quantité:', error);
             });
