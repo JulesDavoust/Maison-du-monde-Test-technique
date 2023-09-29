@@ -3,7 +3,7 @@ Initialiser un projet SPA vuejs avec/ou sans un framework CSS
 - A partir du root du folder, lancer un `yarn install`
 
 - Puis lancer les deux commandes suivantes
-    `yarn app:serve` et `yarn server:serve`
+    `yarn front:serve` et `yarn server:serve`
 
 - le projet s'initialise avec une api répondant à l'url suivante
     SERVER http://localhost:3000/cart
