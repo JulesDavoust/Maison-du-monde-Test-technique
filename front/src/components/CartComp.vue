@@ -1,10 +1,10 @@
 <template>
   <div id="CartComp">
-    <div class="card">
-        <div class="card-body">
+    <div class="card cardCart">
+        <div class="card-body cardBodyCart">
             <h5 class="card-title cardGame">{{ infoObj["value"].name }}</h5>
             <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex justify-content-between align-items-center ddd">
+                <div class="d-flex justify-content-between align-items-center counter">
                     <button class="btn d-flex justify-content-center align-items-center btnCount" @click="decrement">-</button>
                     <div class="h4 count d-flex justify-content-center align-items-center">{{ count }}</div>
                     <button class="btn d-flex justify-content-center align-items-center btnCount" @click="increment">+</button>
@@ -24,7 +24,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col d-flex justify-content-center align-items-center">
-                        <div id="carouselXsmall" class="carousel slide">
+                        <div id="carouselXsmall" class="carousel carousel-dark slide">
                             <div class="carousel-inner">
                                 <div v-if="showImageXsmall == false">
                                     <img :src="infoObj['value'].images[0].large" class="d-block w-100" alt="xsmall">
@@ -113,26 +113,33 @@ export default {
         .catch((error) => {
           console.error('Erreur lors de la mise à jour de la quantité:', error);
         });
+      window.location.reload();
     },
     decrement() {
       if (this.count > 0) {
         this.count -= 1;
-        const newData = { qty: this.count };
-        this.price = this.count * this.infoObj.value.price.base.amount;
-        fetch(`http://localhost:3000/cart/${this.infoObj.value.id}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newData),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data); // Loggez les données mises à jour
+        if (this.count === 0) this.delItemCart();
+        else {
+          const newData = { qty: this.count };
+          this.price = this.count * this.infoObj.value.price.base.amount;
+          fetch(`http://localhost:3000/cart/${this.infoObj.value.id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newData),
           })
-          .catch((error) => {
-            console.error('Erreur lors de la mise à jour de la quantité:', error);
-          });
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data); // Loggez les données mises à jour
+            })
+            .catch((error) => {
+              console.error('Erreur lors de la mise à jour de la quantité:', error);
+            });
+          window.location.reload();
+        }
+      } else {
+        this.delItemCart();
       }
     },
   },
@@ -143,35 +150,42 @@ export default {
 </script>
 
 <style>
+
+.CartComp, .cardCart, .cardBodyCart{
+  z-index: 0;
+}
+
 #carouselXsmall{
-    width:70%;
+  z-index: 0;
+  width:70%;
 }
 
 .card-body{
-    background-color:bisque;
+  z-index: 0;
+  background-color:bisque;
 }
 
 .count{
-    padding-top:7%;
-    width: 20px;
-    text-align: center;
+  padding-top:7%;
+  width: 20px;
+  text-align: center;
 }
 
-.ddd{
-    background-color: white;
-    border:1px solid black;
-    border-radius: 7px;
-    width:100px;
-    height:6vh;
-    margin-bottom: 2%;
+.counter{
+  background-color: white;
+  border:1px solid black;
+  border-radius: 7px;
+  width:100px;
+  height:6vh;
+  margin-bottom: 2%;
 }
 
 .btnCount{
-    background-color: bisque;
-    height: 3vh;;
+  background-color: bisque;
+  height: 3vh;;
 }
 
 .buttonObj{
-    margin-bottom: 2%;
+  margin-bottom: 2%;
 }
 </style>

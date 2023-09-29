@@ -1,11 +1,11 @@
 <template>
     <div id="cartView">
-        <div class="container">
+        <div class="container cartContainer">
             <div class="row cartCompClass" v-for="item in infos" :key="item.key">
-                <MyCart v-bind:infoObj="item"/>
+                <MyCart class="indexMyCart" v-bind:infoObj="item"/>
             </div>
             <div class="buttonTotBuy">
-                <button type="button" class="btn btn-danger me-2 buttonObj">Total : {{ total }}</button>
+                <button type="button" class="btn btn-danger me-2 buttonObj">Total : {{ total }} €</button>
                 <button type="button" class="btn btn-danger me-2 buttonObj">Acheter</button>
             </div>
         </div>
@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       infos: [],
-      total:0,
+      total: 0,
     };
   },
   methods: {
@@ -48,16 +48,21 @@ export default {
       this.infos.push({ key, value });
     });
     console.log(this.infos);
-    for(let i = 0; i<this.infos.length; i++){
-      this.total = this.infos[i].value.qty*this.infos[i].value.price.base.amount + this.total;
+    for (let i = 0; i < this.infos.length; i += 1) {
+      this.total = this.infos[i].value.qty * this.infos[i].value.price.base.amount + this.total;
     }
   },
 };
 </script>
 
 <style>
+.cartView, .cartContainer, .indexMyCart{
+  z-index: 0;
+}
+
 .cartCompClass{
-    padding-top:3%;
+  z-index: 0;
+  padding-top:3%;
 }
 
 .buttonTotBuy{
