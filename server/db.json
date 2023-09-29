@@ -1,6 +1,7 @@
 {
-  "cart": {
-    "166174": {
+  "cart": [
+    {
+      "id": 166174,
       "name": "Canapé-lit style scandinave 3 places gris clair",
       "price": {
         "base": {
@@ -36,9 +37,10 @@
           "large": "//cdn.maisonsdumonde.com/img/canape-lit-style-scandinave-3-places-gris-clair-1000-16-1-166174_7.jpg"
         }
       ],
-      "qty": 3
+      "qty": 5
     },
-    "188239": {
+    {
+      "id": 188239,
       "name": "Canapé d'angle convertible 3/4 places bleu nuit",
       "price": {
         "base": {
@@ -82,9 +84,10 @@
       },
       "qty": 1
     }
-  },
-  "products": {
-    "166174": {
+  ],
+  "products": [
+    {
+      "id": 166174,
       "name": "Canapé-lit style scandinave 3 places gris clair",
       "price": {
         "base": {
@@ -122,7 +125,8 @@
       ],
       "qty": 2
     },
-    "188239": {
+    {
+      "id": 188239,
       "name": "Canapé d'angle convertible 3/4 places bleu nuit",
       "price": {
         "base": {
@@ -166,5 +170,5 @@
       },
       "qty": 1
     }
-  }
+  ]
 }
